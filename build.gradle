@@ -28,6 +28,11 @@ sourceSets.main.resources {
 
 repositories {
     // Add here additional repositories if required by some of the dependencies below.
+    mavenLocal()
+    // Репозиторий для Create, Flywheel и Registrate
+    maven { name = "Create Wire"; url = "https://maven.createmod.net" }
+    // Репозиторий для получения TFMG по ID из CurseForge
+    maven { name = "CurseMaven"; url = "https://cursemaven.com" }
 }
 
 base {
@@ -118,6 +123,16 @@ configurations {
 }
 
 dependencies {
+    // Зависимость от Create (для NeoForge 1.21.1 используется версия 6.0+)
+    implementation "curse.maven:create-328085:7963363"
+
+    implementation "net.createmod.ponder:ponder-neoforge:1.0.82+mc1.21.1"
+    //implementation "net.createmod.catnip:catnip-neoforge-1.21.1:0.8.54"
+
+    // Зависимость от Create: The Factory Must Grow (мод имеет ID 693815 на CurseForge)
+    // Замените 8205648 на ID конкретного файла TFMG 1.21.1 (например, версии tfmg-1.2.2)
+    implementation "curse.maven:create-industry-693815:8205648"
+
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
