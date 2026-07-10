@@ -6,11 +6,10 @@ public class Config {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
     public static final ModConfigSpec.ConfigValue<Double> FUEL_CONSUMPTION_MULTIPLIER = BUILDER
-            .comment("Increases fuel consumption but ensures smoother transitions from the analog signal.")
-            .define("fuelConsumptionMultiplier", 2.0);
+            .defineInRange("fuelConsumptionMultiplier", 1.0, 0.0, 1000.0);
 
     public static final ModConfigSpec.BooleanValue USE_RANDOM_CONSUMPTION = BUILDER
-            .comment("Smoother way to calculate fuel consumption, won't show up properly in engine stats")
+            .comment("Smoother way to calculate fuel consumption (tail after rounding value becomes chance to add 1 to value, makes it more fair)")
             .define("useRandomConsumption", false);
 
     static final ModConfigSpec SPEC = BUILDER.build();

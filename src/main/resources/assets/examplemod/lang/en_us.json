@@ -1,13 +1,5 @@
 {
-  "itemGroup.examplemod": "Example Mod Tab",
-  "block.examplemod.example_block": "Example Block",
-  "item.examplemod.example_item": "Example Item",
-
-  "examplemod.configuration.title": "Example Mod Configs",
-  "examplemod.configuration.section.examplemod.common.toml": "Example Mod Configs",
-  "examplemod.configuration.section.examplemod.common.toml.title": "Example Mod Configs",
-  "examplemod.configuration.items": "Item List",
-  "examplemod.configuration.logDirtBlock": "Log Dirt Block",
-  "examplemod.configuration.magicNumberIntroduction": "Magic Number Text",
-  "examplemod.configuration.magicNumber": "Magic Number"
+  "tfmg_aihtb.configuration.title": "\"TFMG: As It Has To Be\" config",
+  "tfmg_aihtb.configuration.fuelConsumptionMultiplier": "Fuel consumption multiplier",
+  "tfmg_aihtb.configuration.useRandomConsumption": "Use \"random\" consumption"
 }
