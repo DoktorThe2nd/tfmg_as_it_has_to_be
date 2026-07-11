@@ -1,5 +1,5 @@
 {
   "tfmg_aihtb.configuration.title": "\"TFMG: As It Has To Be\" config",
   "tfmg_aihtb.configuration.fuelConsumptionMultiplier": "Fuel consumption multiplier",
-  "tfmg_aihtb.configuration.useRandomConsumption": "Use \"random\" consumption"
+  "tfmg_aihtb.configuration.smartFuelConsumption": "Smart fuel consumption"
 }
