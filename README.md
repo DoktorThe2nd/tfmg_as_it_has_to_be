@@ -1,25 +1,20 @@
+TFMG: As It Has To Be
+=================
+[Create: The Factory Must Grow](https://github.com/DrMango14/Create-The_Factory_Must_Grow) is VERY buggy mod.
+I don't blame author ([DrMangoTea](https://github.com/DrMango14)),
+but still want to fix 'em all!
 
-Installation information
+Main reason for creating this mod is really broken fuel consumption calculation
+(at some point engine does NOT take fuel at all), and well I don't like it, so I fixed it.
+
+Mod will have some more bugfixes later, or maybe even some new mechanics to ensure best playing experience.
+
+P.S. If DrMangoTea is reading this, feel free to take my code to fix bugs in the original mod,
+and actually please just do it.
+
+License
 =======
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+*TFMG: As It Has To Be* is under [MIT](https://choosealicense.com/licenses/mit/) license, feel free to use this code.
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
-
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
-
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
-
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+(*Create: The Factory Must Grow* is also under MIT license, as said on Modrinth ([here](https://modrinth.com/mod/create-tfmg)))
