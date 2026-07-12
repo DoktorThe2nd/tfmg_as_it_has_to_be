@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "EngineFixes",
-    "RegularEngineFixes"
+    "RegularEngineFixes",
+    "SteelTankBlockFix"
   ],
   "injectors": {
     "defaultRequire": 1

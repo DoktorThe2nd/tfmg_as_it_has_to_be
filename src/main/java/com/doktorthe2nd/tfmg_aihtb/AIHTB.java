@@ -1,5 +1,6 @@
 package com.doktorthe2nd.tfmg_aihtb;
 
+import com.doktorthe2nd.tfmg_aihtb.items.ModItems;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -21,12 +22,11 @@ public class AIHTB {
     public AIHTB(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
         modContainer.registerConfig(ModConfig.Type.SERVER, Config.SPEC);
+        ModItems.init(modEventBus);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
         LOGGER.info("TFMG_AIHTB common setup");
-        event.enqueueWork(() -> {
-
-        });
+        //event.enqueueWork(() -> {});
     }
 }

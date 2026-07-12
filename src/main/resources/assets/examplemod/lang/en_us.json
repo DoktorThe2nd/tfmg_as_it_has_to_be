@@ -1,5 +1,6 @@
 {
   "tfmg_aihtb.configuration.title": "\"TFMG: As It Has To Be\" config",
   "tfmg_aihtb.configuration.fuelConsumptionMultiplier": "Fuel consumption multiplier",
-  "tfmg_aihtb.configuration.smartFuelConsumption": "Smart fuel consumption"
+  "tfmg_aihtb.configuration.smartFuelConsumption": "Smart fuel consumption",
+  "tfmg_aihtb.configuration.disableEnginePipeUpgrade": "Disable engine pipe upgrade"
 }

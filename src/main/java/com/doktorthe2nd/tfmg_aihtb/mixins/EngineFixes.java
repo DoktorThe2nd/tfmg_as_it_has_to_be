@@ -3,12 +3,17 @@ package com.doktorthe2nd.tfmg_aihtb.mixins;
 import com.doktorthe2nd.tfmg_aihtb.AIHTB;
 import com.doktorthe2nd.tfmg_aihtb.Config;
 import com.doktorthe2nd.tfmg_aihtb.IFuelConsumptionFormula;
+import com.doktorthe2nd.tfmg_aihtb.items.ModItems;
 import com.drmangotea.tfmg.content.engines.base.AbstractEngineBlockEntity;
+import com.drmangotea.tfmg.content.engines.base.EngineComponentsInventory;
 import com.drmangotea.tfmg.content.engines.types.AbstractSmallEngineBlockEntity;
 import com.drmangotea.tfmg.registry.TFMGDataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,6 +27,10 @@ public abstract class EngineFixes {
     @Shadow(remap = false) public int oil;
     @Shadow(remap = false) public int coolingFluid;
     @Shadow(remap = false) public abstract int engineLength();
+    @Shadow(remap = false) public abstract Ingredient nextComponent();
+    @Shadow(remap = false) public EngineComponentsInventory componentsInventory;
+    @Shadow(remap = false) public abstract boolean hasAllComponents();
+    @Shadow(remap = false) public abstract AbstractSmallEngineBlockEntity getControllerBE();
 
     // original formula * FUEL_CONSUMPTION_MULTIPLIER
     @Unique
@@ -48,27 +57,44 @@ public abstract class EngineFixes {
         else cir.setReturnValue((int)Math.ceil(val));
     }
 
-    @ModifyVariable(
+    @Inject(
             method = "insertItem(Lnet/minecraft/world/item/ItemStack;ZLnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Z",
             at = @At("HEAD"),
-            argsOnly = true,
+            cancellable = true,
             remap = false
     )
-    private ItemStack patchComponentCheck(ItemStack itemStack) {
-        var oilCanItem = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(AIHTB.TFMG_MODID, "oil_can"));
-        var cooling_fluid_bottle = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(AIHTB.TFMG_MODID, "cooling_fluid_bottle"));
-        if (itemStack == null || (!itemStack.is(cooling_fluid_bottle) &&
-                !itemStack.is(oilCanItem))) return itemStack;
-        try {
-            var amountComponent = TFMGDataComponents.AMOUNT;
-            if (!itemStack.isEmpty() && !itemStack.has(amountComponent)) {
-                itemStack.set(amountComponent, 0);
-                // game would have crashed, if not this!
+    private void patchInsertItem(ItemStack itemStack, boolean shifting, Player player, InteractionHand hand, CallbackInfoReturnable<Boolean> cir) {
+        if (itemStack == null) return;
+
+        if (itemStack.is(ModItems.ENGINEER_SET)) {
+            var control = this.getControllerBE();
+            if (control == null) return;
+            while (!control.hasAllComponents()) {
+                if (control.nextComponent().isEmpty() || control.nextComponent().getItems().length == 0) return;
+                control.componentsInventory.insertItem(control.nextComponent().getItems()[0]);
             }
-        } catch (Exception e) {
-            return itemStack;
+            itemStack.shrink(1);
         }
 
-        return itemStack;
+        var industrial_pipe = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(AIHTB.TFMG_MODID, "industrial_pipe"));
+        if (itemStack.is(industrial_pipe) && Config.DISABLE_ENGINE_PIPE_UPGRADE.isTrue()) {
+            cir.setReturnValue(false);
+            cir.cancel();
+        }
+        var oil_can = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(AIHTB.TFMG_MODID, "oil_can"));
+        var cooling_fluid_bottle = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(AIHTB.TFMG_MODID, "cooling_fluid_bottle"));
+        if (itemStack.is(cooling_fluid_bottle) || itemStack.is(oil_can)) {
+            try {
+                var amountComponent = TFMGDataComponents.AMOUNT;
+                if (!itemStack.isEmpty() && !itemStack.has(amountComponent)) {
+                    itemStack.set(amountComponent, 0);
+                    AIHTB.LOGGER.warn("TFMG: As It Has To Be prevented crash!");
+                }
+            } catch (Exception e) {
+                AIHTB.LOGGER.error("Exception: {}", e.getMessage());
+                cir.setReturnValue(false);
+                cir.cancel();
+            }
+        }
     }
 }
