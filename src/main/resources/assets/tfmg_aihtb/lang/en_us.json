@@ -1,4 +1,8 @@
 {
+  "item.tfmg_aihtb.engineer_set": "Engineer Set",
+
+  "tfmg_aihtb.engine_is_not_empty": "Engine already have some parts",
+
   "tfmg_aihtb.configuration.title": "\"TFMG: As It Has To Be\" config",
   "tfmg_aihtb.configuration.fuelConsumptionMultiplier": "Fuel consumption multiplier",
   "tfmg_aihtb.configuration.smartFuelConsumption": "Smart fuel consumption",

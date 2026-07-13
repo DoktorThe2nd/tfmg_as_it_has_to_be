@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {"item": "tfmg:crankshaft"},
+    {"item": "tfmg:steel_cogwheel"},
+    {"item": "tfmg:large_steel_cogwheel"},
+    {"item": "create:belt_connector"},
+    {"item": "tfmg:steel_pipe"},
+    {"item": "tfmg:steel_pipe"},
+    {"item": "tfmg:steel_mechanism"}
+  ],
+  "result": {
+    "id": "tfmg_aihtb:engineer_set",
+    "count": 1
+  }
+}

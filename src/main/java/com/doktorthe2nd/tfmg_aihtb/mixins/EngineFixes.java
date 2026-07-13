@@ -8,8 +8,7 @@ import com.drmangotea.tfmg.content.engines.base.AbstractEngineBlockEntity;
 import com.drmangotea.tfmg.content.engines.base.EngineComponentsInventory;
 import com.drmangotea.tfmg.content.engines.types.AbstractSmallEngineBlockEntity;
 import com.drmangotea.tfmg.registry.TFMGDataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -18,7 +17,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AbstractSmallEngineBlockEntity.class)
@@ -27,9 +25,6 @@ public abstract class EngineFixes {
     @Shadow(remap = false) public int oil;
     @Shadow(remap = false) public int coolingFluid;
     @Shadow(remap = false) public abstract int engineLength();
-    @Shadow(remap = false) public abstract Ingredient nextComponent();
-    @Shadow(remap = false) public EngineComponentsInventory componentsInventory;
-    @Shadow(remap = false) public abstract boolean hasAllComponents();
     @Shadow(remap = false) public abstract AbstractSmallEngineBlockEntity getControllerBE();
 
     // original formula * FUEL_CONSUMPTION_MULTIPLIER
@@ -69,6 +64,10 @@ public abstract class EngineFixes {
         if (itemStack.is(ModItems.ENGINEER_SET)) {
             var control = this.getControllerBE();
             if (control == null) return;
+            if (!control.componentsInventory.isEmpty()) {
+                player.displayClientMessage(Component.translatable("tfmg_aihtb.engine_is_not_empty"), true);
+                return;
+            }
             while (!control.hasAllComponents()) {
                 if (control.nextComponent().isEmpty() || control.nextComponent().getItems().length == 0) return;
                 control.componentsInventory.insertItem(control.nextComponent().getItems()[0]);
@@ -76,14 +75,12 @@ public abstract class EngineFixes {
             itemStack.shrink(1);
         }
 
-        var industrial_pipe = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(AIHTB.TFMG_MODID, "industrial_pipe"));
-        if (itemStack.is(industrial_pipe) && Config.DISABLE_ENGINE_PIPE_UPGRADE.isTrue()) {
+        if (itemStack.is(ModItems.get(AIHTB.TFMG_MODID, "industrial_pipe")) && Config.DISABLE_ENGINE_PIPE_UPGRADE.isTrue()) {
             cir.setReturnValue(false);
             cir.cancel();
         }
-        var oil_can = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(AIHTB.TFMG_MODID, "oil_can"));
-        var cooling_fluid_bottle = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(AIHTB.TFMG_MODID, "cooling_fluid_bottle"));
-        if (itemStack.is(cooling_fluid_bottle) || itemStack.is(oil_can)) {
+        if (itemStack.is(ModItems.get(AIHTB.TFMG_MODID, "cooling_fluid_bottle"))
+                || itemStack.is(ModItems.get(AIHTB.TFMG_MODID, "oil_can"))) {
             try {
                 var amountComponent = TFMGDataComponents.AMOUNT;
                 if (!itemStack.isEmpty() && !itemStack.has(amountComponent)) {
